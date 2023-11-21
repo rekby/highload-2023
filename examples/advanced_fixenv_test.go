@@ -22,9 +22,9 @@ func TestInbox(t *testing.T) {
 }
 
 func Inbox(e fixenv.Env) string {
-	return fixenv.Cache(e, nil, nil, func() (string, error) {
+	return fixenv.CacheResult[string](e, func() (*fixenv.GenericResult[string], error) {
 		path := filepath.Join(Folder(e), "inbox")
 		e.T().Logf("Creating inbox directory: %v", path)
-		return path, os.Mkdir(path, 0666)
+		return fixenv.NewGenericResult(path), os.Mkdir(path, 0666)
 	})
 }

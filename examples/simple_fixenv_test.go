@@ -27,16 +27,16 @@ func TestCreateFile_Fixenv(t *testing.T) {
 }
 
 func Folder(e fixenv.Env) string {
-	return fixenv.CacheResult(e, func() (*fixenv.GenericResult[string], error) {
+	f := func() (*fixenv.GenericResult[string], error) {
 		dir, err := os.MkdirTemp("", "")
 		if err != nil {
 			return nil, err
 		}
-		e.T().Logf("Directory created: %v", dir)
 		clean := func() {
 			_ = os.RemoveAll(dir)
-			e.T().Logf("Directory removed: %v", dir)
 		}
 		return fixenv.NewGenericResultWithCleanup(dir, clean), nil
-	})
+	}
+
+	return fixenv.CacheResult(e, f)
 }
